@@ -357,6 +357,7 @@ body {
                 const sunriseTime = new Date(data.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 const sundownTime = new Date(data.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+                // Update the UI
                 document.getElementById('city').textContent = cityName || data.name;
                 document.getElementById('description').textContent = data.weather[0].description;
                 document.getElementById('temperature').textContent = `${data.main.temp} °C`;
@@ -371,6 +372,7 @@ body {
 
                 let historicalData = JSON.parse(localStorage.getItem(cityName)) || [];
 
+                // Save weather data if not already saved for today
                 const existingData = historicalData.find(entry => entry.date === todayDate);
                 if (!existingData) {
                     const currentWeather = {
@@ -388,12 +390,14 @@ body {
                     cleanOldWeatherData(cityName);
                 }
 
+                // Now that data is fetched and stored, call createChart
                 createChart(cityName);
             } catch (error) {
                 console.error('Error fetching weather data:', error);
                 alert('Error fetching weather data. Please try again.');
             }
         }
+
 
 
 
@@ -536,15 +540,21 @@ body {
 
             const historicalData = JSON.parse(localStorage.getItem(cityName)) || [];
 
+            if (historicalData.length === 0) {
+                console.warn('No historical data found for chart creation.');
+                return; // Avoid creating a chart with no data
+            }
+
             const labels = historicalData.map(entry => entry.date);
             const temperatureData = historicalData.map(entry => entry.temp);
             const humidityData = historicalData.map(entry => entry.humidity);
 
             const futureForecastData = JSON.parse(localStorage.getItem('forecastData')) || [];
             
+            // Add forecast data if available
             futureForecastData.forEach(forecast => {
-                labels.push(forecast.date); 
-                temperatureData.push(forecast.temp); 
+                labels.push(forecast.date);
+                temperatureData.push(forecast.temp);
                 humidityData.push(forecast.humidity);
             });
 
@@ -604,6 +614,7 @@ body {
                 });
             }
         }
+
 
         window.onload = () => {
             loadDefaultCity();
