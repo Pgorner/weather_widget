@@ -357,7 +357,6 @@ body {
                 const sunriseTime = new Date(data.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 const sundownTime = new Date(data.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-                // Update the UI
                 document.getElementById('city').textContent = cityName || data.name;
                 document.getElementById('description').textContent = data.weather[0].description;
                 document.getElementById('temperature').textContent = `${data.main.temp} °C`;
@@ -372,7 +371,6 @@ body {
 
                 let historicalData = JSON.parse(localStorage.getItem(cityName)) || [];
 
-                // Save weather data if not already saved for today
                 const existingData = historicalData.find(entry => entry.date === todayDate);
                 if (!existingData) {
                     const currentWeather = {
@@ -390,7 +388,6 @@ body {
                     cleanOldWeatherData(cityName);
                 }
 
-                // Now that data is fetched and stored, call createChart
                 createChart(cityName);
             } catch (error) {
                 console.error('Error fetching weather data:', error);
@@ -421,7 +418,7 @@ body {
                     }
                 });
 
-                const forecastToShow = Object.values(forecastsByDay).slice(1, 6); // Skip today
+                const forecastToShow = Object.values(forecastsByDay).slice(1, 6);
 
                 const forecastContainer = document.getElementById('forecast-container');
                 forecastContainer.innerHTML = '';
@@ -494,7 +491,7 @@ body {
 
                             document.getElementById('city-input').value = cityName;
 
-                            await getCoordinates(cityName); // Fetch weather data for the current location
+                            await getCoordinates(cityName);
                         } catch (error) {
                             console.error('Error fetching weather for current location:', error);
                             loadDefaultFallbackCity();
@@ -502,11 +499,11 @@ body {
                     },
                     (error) => {
                         console.error('Geolocation error:', error);
-                        loadDefaultFallbackCity(); // If geolocation fails, load the fallback city
+                        loadDefaultFallbackCity();
                     }
                 );
             } else {
-                loadDefaultFallbackCity(); // If geolocation is not supported, load the fallback city
+                loadDefaultFallbackCity();
             }
         }
 
@@ -542,7 +539,7 @@ body {
 
             if (historicalData.length === 0) {
                 console.warn('No historical data found for chart creation.');
-                return; // Avoid creating a chart with no data
+                return;
             }
 
             const labels = historicalData.map(entry => entry.date);
@@ -551,7 +548,6 @@ body {
 
             const futureForecastData = JSON.parse(localStorage.getItem('forecastData')) || [];
             
-            // Add forecast data if available
             futureForecastData.forEach(forecast => {
                 labels.push(forecast.date);
                 temperatureData.push(forecast.temp);
