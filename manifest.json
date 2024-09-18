@@ -1,0 +1,45 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.10/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.10",
+  "version": "1.0.0",
+  "id": "your-app-id",  
+  "packageName": "com.patrick.weatherwidget",
+  "developer": {
+    "name": "Patrick Görner",
+    "websiteUrl": "https://patrick.github.io/weather_widget",
+    "privacyUrl": "https://patrick.github.io/weather_widget/privacy-policy.md",
+    "termsOfUseUrl": "https://patrick.github.io/weather_widget/LICENSE.md"
+  },
+  "name": {
+    "short": "Weather Widget",
+    "full": "Weather Widget by Patrick Görner"
+  },
+  "description": {
+    "short": "Real-time weather data with a 5-day forecast and 2-week weather trends.",
+    "full": "Weather Widget provides real-time weather updates for any city you input, along with a 5-day forecast and weather trend data retained for up to 2 weeks. Track temperature and humidity changes using intuitive charts."
+  },
+  "icons": {
+    "color": "color-icon.png",  
+    "outline": "outline-icon.png"  
+  },
+  "accentColor": "#3399ff",
+  "staticTabs": [
+    {
+      "entityId": "weatherTab",
+      "name": "Weather",
+      "contentUrl": "https://pgorner.github.io/weather_widget/",
+      "websiteUrl": "https://patrick.github.io/weather_widget",
+      "scopes": [
+        "personal"
+      ]
+    }
+  ],
+  "permissions": [
+    "identity",
+    "messageTeamMembers"
+  ],
+  "validDomains": [
+    "openweathermap.org",
+    "patrick.github.io"
+  ]
+}
