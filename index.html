@@ -478,11 +478,13 @@ body {
 
         function loadDefaultCity() {
             const storedCity = localStorage.getItem('city');
-            if (storedCity) {
-                document.getElementById('city-input').value = storedCity;
-                getCoordinates(storedCity);
-            }
+            const defaultCity = "Stuttgart"; // Default to Stuttgart if no city is stored
+            const cityToLoad = storedCity || defaultCity;
+
+            document.getElementById('city-input').value = cityToLoad;
+            getCoordinates(cityToLoad);
         }
+
 
 
         function cleanOldWeatherData(cityName) {
