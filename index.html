@@ -476,13 +476,40 @@ body {
             document.getElementById('current-time').textContent = timeString;
         }
 
-        function loadDefaultCity() {
-            const storedCity = localStorage.getItem('city');
-            const defaultCity = "Stuttgart"; // Default to Stuttgart if no city is stored
-            const cityToLoad = storedCity || defaultCity;
 
-            document.getElementById('city-input').value = cityToLoad;
-            getCoordinates(cityToLoad);
+        function loadDefaultCity() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    async (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        try {
+                            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`);
+                            const data = await response.json();
+                            const cityName = data.name;
+
+                            document.getElementById('city-input').value = cityName;
+
+                            await getCoordinates(cityName); // Fetch weather data for the current location
+                        } catch (error) {
+                            console.error('Error fetching weather for current location:', error);
+                            loadDefaultFallbackCity();
+                        }
+                    },
+                    (error) => {
+                        console.error('Geolocation error:', error);
+                        loadDefaultFallbackCity(); // If geolocation fails, load the fallback city
+                    }
+                );
+            } else {
+                loadDefaultFallbackCity(); // If geolocation is not supported, load the fallback city
+            }
+        }
+
+        function loadDefaultFallbackCity() {
+            const defaultCity = "Stuttgart";
+            document.getElementById('city-input').value = defaultCity;
+            getCoordinates(defaultCity);
         }
 
 
